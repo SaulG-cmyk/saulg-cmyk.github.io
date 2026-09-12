@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Saúl Gutiérrez — Software Development & Backend</title>
+<meta name="description" content="Portafolio de Saúl Gutiérrez. Desarrollo de software, bases de datos relacionales y backend.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0F172A;
+    --slate:#1E293B;
+    --border-dark:#334155;
+    --text:#0F172A;
+    --muted:#64748B;
+    --muted-light:#94A3B8;
+    --bg:#FFFFFF;
+    --bg-soft:#F8FAFC;
+    --border:#E2E8F0;
+    --sans:"Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--bg);color:var(--text);
+    font-family:var(--sans);font-size:16px;line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none}
+  a:focus-visible,button:focus-visible{outline:2px solid var(--navy);outline-offset:3px;border-radius:6px}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 40px}
+  svg{display:block}
+
+  /* ---------- Nav ---------- */
+  nav{
+    position:sticky;top:0;z-index:20;background:rgba(255,255,255,.92);
+    backdrop-filter:blur(8px);border-bottom:1px solid var(--border);
+  }
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .brand{display:flex;align-items:center;gap:8px;font-weight:600;font-size:.95rem}
+  .nav-links{display:flex;gap:28px;font-size:.88rem;color:var(--muted)}
+  .nav-links a:hover{color:var(--text)}
+  .btn{
+    background:var(--navy);color:#fff;font-size:.82rem;font-weight:500;
+    padding:9px 18px;border-radius:7px;border:0;cursor:pointer;
+  }
+  .btn:hover{background:var(--slate)}
+  .nav-toggle{display:none;background:none;border:0;padding:6px;cursor:pointer;color:var(--text)}
+
+  /* ---------- Hero ---------- */
+  .hero{padding:76px 0 88px}
+  .hero-inner{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:56px;align-items:center}
+  h1{font-size:2.5rem;font-weight:400;line-height:1.28;letter-spacing:-.02em;margin:0 0 22px;max-width:15em}
+  h1 strong{font-weight:700}
+  .hero p{color:var(--muted);font-size:.88rem;line-height:1.65;max-width:34em;margin:0 0 28px}
+  .socials{display:flex;gap:10px}
+  .socials a{
+    width:40px;height:40px;border:1px solid var(--border);border-radius:8px;
+    display:grid;place-items:center;color:var(--text);background:#fff;
+    transition:border-color .15s, transform .15s;
+  }
+  .socials a:hover{border-color:var(--navy);transform:translateY(-2px)}
+  .avatar{
+    width:180px;height:180px;border-radius:50%;background:var(--bg-soft);
+    display:grid;place-items:center;color:var(--muted-light);
+    border:1px solid var(--border);overflow:hidden;
+  }
+  .avatar img{width:100%;height:100%;object-fit:cover}
+
+  /* ---------- Secciones ---------- */
+  section{padding:72px 0}
+  .soft{background:var(--bg-soft);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+  h2{
+    text-align:center;font-size:1.7rem;font-weight:700;letter-spacing:-.02em;
+    margin:0 0 44px;
+  }
+  h2::after{
+    content:"";display:block;width:44px;height:3px;background:currentColor;
+    border-radius:2px;margin:14px auto 0;
+  }
+  .intro{max-width:78ch;margin:0 auto;text-align:center;color:var(--text);font-size:.95rem}
+
+  /* ---------- Habilidades ---------- */
+  .skills{display:flex;flex-wrap:wrap;justify-content:center;gap:20px;max-width:520px;margin:0 auto}
+  .skill{
+    width:100px;height:82px;border:1px solid var(--border);border-radius:10px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
+    background:#fff;transition:border-color .15s, box-shadow .15s;
+  }
+  .skill:hover{border-color:var(--muted-light);box-shadow:0 2px 10px rgba(15,23,42,.06)}
+  .skill span{font-size:.76rem;color:var(--muted)}
+
+  /* ---------- Proyectos ---------- */
+  .dark{background:var(--navy);color:#fff}
+  .projects{display:flex;flex-direction:column;gap:18px}
+  .card{
+    background:var(--slate);border:1px solid var(--border-dark);border-radius:10px;
+    padding:22px 24px;
+  }
+  .card-head{display:flex;align-items:flex-start;gap:14px;margin-bottom:14px}
+  .card-icon{
+    width:36px;height:36px;flex:none;border-radius:8px;background:#2B3A52;
+    display:grid;place-items:center;color:#CBD5E1;
+  }
+  .card h3{font-size:1rem;font-weight:600;margin:0 0 2px}
+  .card .sub{font-size:.78rem;color:var(--muted-light);margin:0}
+  .card ul{margin:0;padding-left:18px;font-size:.86rem;color:#E2E8F0}
+  .card li{margin-bottom:8px}
+  .card li:last-child{margin-bottom:0}
+  .card > p{font-size:.86rem;color:#E2E8F0;margin:0}
+  .tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}
+  .tags span{
+    font-size:.72rem;color:#CBD5E1;border:1px solid var(--border-dark);
+    border-radius:5px;padding:3px 9px;
+  }
+
+  /* ---------- Contacto ---------- */
+  .contact-sub{text-align:center;color:var(--muted);font-size:.85rem;margin:-28px 0 36px}
+  .contact-list{display:flex;flex-direction:column;gap:14px}
+  .contact-row{
+    display:flex;align-items:center;gap:16px;border:1px solid var(--border);
+    border-radius:10px;padding:16px 20px;background:#fff;
+    transition:border-color .15s, transform .15s;
+  }
+  .contact-row:hover{border-color:var(--navy);transform:translateX(3px)}
+  .contact-icon{
+    width:38px;height:38px;flex:none;border-radius:8px;background:var(--navy);
+    display:grid;place-items:center;color:#fff;
+  }
+  .contact-row strong{display:block;font-size:.88rem;font-weight:600}
+  .contact-row .val{font-size:.82rem;color:var(--muted)}
+
+  footer{
+    border-top:1px solid var(--border);text-align:center;
+    color:var(--muted);font-size:.8rem;padding:26px 0;
+  }
+
+  @media (max-width:860px){
+    .wrap{padding:0 24px}
+    .nav-links{
+      display:none;position:absolute;top:64px;left:0;right:0;background:#fff;
+      flex-direction:column;gap:0;padding:8px 24px 16px;border-bottom:1px solid var(--border);
+    }
+    .nav-links.open{display:flex}
+    .nav-links a{padding:11px 0;border-bottom:1px solid var(--border)}
+    .nav-toggle{display:block}
+    .hero{padding:52px 0 60px}
+    .hero-inner{grid-template-columns:1fr;gap:36px;justify-items:start}
+    h1{font-size:1.95rem}
+    .avatar{width:140px;height:140px}
+    h2{font-size:1.45rem}
+    section{padding:56px 0}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none!important}
+    html{scroll-behavior:auto}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-inner">
+    <div class="brand">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="10" r="3"/><path d="M7 20.7a8 8 0 0 1 10 0"/></svg>
+      Personal
+    </div>
+    <div class="nav-links" id="navLinks">
+      <a href="#sobre-mi">Sobre mí</a>
+      <a href="#habilidades">Habilidades</a>
+      <a href="#proyectos">Proyectos</a>
+      <a href="#contacto">Contacto</a>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="navLinks">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+    <a class="btn" href="#contacto" style="display:inline-block">Contactar</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap hero-inner">
+    <div>
+      <h1>Hello I'm Saul Gutiérrez.<br><strong>Software Development</strong> &amp; Backend</h1>
+      <p>Estudiante de la Facultad de Ingeniería UAEMex. Construyo el lado que no se ve: bases de datos relacionales bien modeladas, lógica de negocio que aguanta y sistemas que reemplazan el trabajo manual.</p>
+      <div class="socials">
+        <a href="https://github.com/SaulG-cmyk" target="_blank" rel="noopener" aria-label="GitHub">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.9a3.4 3.4 0 0 0-.9-2.6c3-.3 6.2-1.5 6.2-6.7A5.2 5.2 0 0 0 19.9 5a4.9 4.9 0 0 0-.1-3.6s-1.1-.3-3.7 1.4a12.7 12.7 0 0 0-6.6 0C6.9 1.1 5.8 1.4 5.8 1.4A4.9 4.9 0 0 0 5.7 5a5.2 5.2 0 0 0-1.4 3.6c0 5.2 3.2 6.4 6.2 6.7a3.4 3.4 0 0 0-.9 2.6V22"/></svg>
+        </a>
+        <a href="mailto:saulgutierrez143@gmail.com" aria-label="Correo">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg>
+        </a>
+        <a href="#proyectos" aria-label="Proyectos">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="avatar">
+      <!-- Sustituye por: <img src="foto.jpg" alt="Saúl Gutiérrez"> -->
+      <svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><circle cx="12" cy="9" r="3.6"/><path d="M5 20a7 7 0 0 1 14 0"/></svg>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="soft" id="sobre-mi">
+    <div class="wrap">
+      <h2>Sobre mí</h2>
+      <p class="intro">Estudio Ingeniería en Computación en la UAEMex y me enfoco en desarrollo de software, modelado de bases de datos y seguridad informática. He trabajado en equipos multidisciplinarios donde me tocó coordinar la comunicación entre frontend y backend, además de documentar la arquitectura para que otros pudieran retomar el trabajo sin depender de mí.</p>
+    </div>
+  </section>
+
+  <section id="habilidades">
+    <div class="wrap">
+      <h2>Habilidades técnicas</h2>
+      <div class="skills">
+        <div class="skill">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></svg>
+          <span>C#</span>
+        </div>
+        <div class="skill">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m4 17 6-5-6-5M12 19h8"/></svg>
+          <span>Python</span>
+        </div>
+        <div class="skill">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8h1a4 4 0 0 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><path d="M6 2v3M10 2v3M14 2v3"/></svg>
+          <span>Java</span>
+        </div>
+        <div class="skill">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 9 6 6M15 9l-6 6"/></svg>
+          <span>Linux</span>
+        </div>
+        <div class="skill">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 3 7v10l9 5 9-5V7Z"/><path d="m3 7 9 5 9-5M12 22V12"/></svg>
+          <span>Unity</span>
+        </div>
+        <div class="skill">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="8" r="3"/><path d="M6 9v6M15.5 9.8 8.5 15"/></svg>
+          <span>Git</span>
+        </div>
+        <div class="skill">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg>
+          <span>PostgreSQL</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="dark" id="proyectos">
+    <div class="wrap">
+      <h2>Proyectos destacados</h2>
+      <div class="projects">
+
+        <article class="card">
+          <div class="card-head">
+            <div class="card-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h7v14H3zM14 5h7v14h-7z"/></svg>
+            </div>
+            <div>
+              <h3>Sistema empresarial</h3>
+              <p class="sub">Novvus · Desarrollo de software</p>
+            </div>
+          </div>
+          <ul>
+            <li>Automatización de funciones administrativas que antes se hacían a mano en programas separados.</li>
+            <li>Diseñé módulos personalizables según los requerimientos de cada cliente, sin fragmentar el flujo del sistema.</li>
+          </ul>
+          <div class="tags"><span>CRM</span><span>Bases de datos</span><span>Automatización</span></div>
+        </article>
+
+        <article class="card">
+          <div class="card-head">
+            <div class="card-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg>
+            </div>
+            <div>
+              <h3>Sistema integral de control escolar</h3>
+              <p class="sub">Desarrollador de lógica y base de datos</p>
+            </div>
+          </div>
+          <p>Diseñé e implementé la base de datos relacional en PostgreSQL para gestionar y consultar expedientes escolares, coordinando la integración entre frontend y backend.</p>
+          <div class="tags"><span>PostgreSQL</span><span>SQL</span><span>Git</span></div>
+        </article>
+
+        <article class="card">
+          <div class="card-head">
+            <div class="card-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 9 5-9 5-9-5Z"/><path d="m3 12 9 5 9-5M3 17l9 5 9-5"/></svg>
+            </div>
+            <div>
+              <h3>Mecánicas en Unity</h3>
+              <p class="sub">Desarrollo de videojuegos</p>
+            </div>
+          </div>
+          <p>Desarrollo de scripts en C# y sistemas de interacción para entornos virtuales dentro del motor Unity.</p>
+          <div class="tags"><span>Unity</span><span>C#</span></div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="soft" id="contacto">
+    <div class="wrap">
+      <h2>Contacto</h2>
+      <p class="contact-sub">¿Te interesa colaborar o conocer más de mi trabajo?</p>
+      <div class="contact-list">
+        <a class="contact-row" href="mailto:saulgutierrez143@gmail.com">
+          <div class="contact-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg>
+          </div>
+          <div>
+            <strong>Email</strong>
+            <span class="val">saulgutierrez143@gmail.com</span>
+          </div>
+        </a>
+        <a class="contact-row" href="https://github.com/SaulG-cmyk" target="_blank" rel="noopener">
+          <div class="contact-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.9a3.4 3.4 0 0 0-.9-2.6c3-.3 6.2-1.5 6.2-6.7A5.2 5.2 0 0 0 19.9 5a4.9 4.9 0 0 0-.1-3.6s-1.1-.3-3.7 1.4a12.7 12.7 0 0 0-6.6 0C6.9 1.1 5.8 1.4 5.8 1.4A4.9 4.9 0 0 0 5.7 5a5.2 5.2 0 0 0-1.4 3.6c0 5.2 3.2 6.4 6.2 6.7a3.4 3.4 0 0 0-.9 2.6V22"/></svg>
+          </div>
+          <div>
+            <strong>GitHub</strong>
+            <span class="val">github.com/SaulG-cmyk</span>
+          </div>
+        </a>
+        <a class="contact-row" href="https://instagram.com/saul.sys" target="_blank" rel="noopener">
+          <div class="contact-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="3.6"/><circle cx="17.2" cy="6.8" r="1"/></svg>
+          </div>
+          <div>
+            <strong>Instagram</strong>
+            <span class="val">instagram.com/saul.sys</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>© 2026 Saúl Gutiérrez</footer>
+
+<script>
+  const toggle = document.getElementById('navToggle');
+  const links = document.getElementById('navLinks');
+  toggle.addEventListener('click', () => {
+    const open = links.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', open);
+  });
+  links.addEventListener('click', e => {
+    if (e.target.tagName === 'A') {
+      links.classList.remove('open');
+      toggle.setAttribute('aria-expanded', 'false');
+    }
+  });
+</script>
+
+</body>
+</html>
