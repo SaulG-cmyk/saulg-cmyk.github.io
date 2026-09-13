@@ -29,7 +29,7 @@
     margin: 0; background: var(--bg); color: var(--text);
     font-family: var(--sans); font-size: 16px; line-height: 1.6;
     -webkit-font-smoothing: antialiased;
-    cursor: none; overflow-x: hidden;
+    cursor: none;
     padding-top: var(--nav-h);
   }
   section[id], header[id] { scroll-margin-top: var(--nav-h); }
@@ -88,18 +88,28 @@
   /* ── Menú móvil (fuera del nav) ── */
   #mobileMenu {
     display: none;
-    position: fixed; top: var(--nav-h); left: 0; right: 0; bottom: 0;
-    z-index: 90;
+    position: fixed; inset: 0;
+    z-index: 200;
     background: #FFFFFF;
-    padding: 24px 24px 40px;
     overflow-y: auto;
-    opacity: 0; transform: translateY(-8px);
-    transition: opacity 0.22s ease, transform 0.22s ease;
+    opacity: 0;
+    transition: opacity 0.2s ease;
   }
-  #mobileMenu.open { opacity: 1; transform: translateY(0); }
+  #mobileMenu.open { opacity: 1; }
+  .menu-head {
+    display: flex; align-items: center; justify-content: space-between;
+    height: var(--nav-h); padding: 0 24px;
+    border-bottom: 1px solid var(--border);
+  }
+  .menu-head .brand { font-weight: 600; font-size: .95rem; }
+  .menu-close {
+    background: none; border: 0; padding: 8px; margin-right: -8px;
+    color: var(--text); cursor: pointer;
+  }
+  .menu-links { padding: 16px 24px 48px; }
   #mobileMenu a {
     display: block; font-size: 1.4rem; font-weight: 600; color: var(--text);
-    padding: 18px 0; border-bottom: 1px solid var(--border);
+    padding: 20px 0; border-bottom: 1px solid var(--border);
   }
   #mobileMenu a:last-child { border-bottom: 0; }
 
@@ -261,10 +271,21 @@
 </nav>
 
 <div id="mobileMenu" aria-hidden="true">
-  <a href="#sobre-mi">Sobre mí</a>
-  <a href="#habilidades">Habilidades</a>
-  <a href="#proyectos">Proyectos</a>
-  <a href="#contacto">Contacto</a>
+  <div class="menu-head">
+    <div class="brand">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="display:inline-block;vertical-align:-3px;margin-right:6px"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="10" r="3"/><path d="M7 20.7a8 8 0 0 1 10 0"/></svg>
+      Personal
+    </div>
+    <button class="menu-close" id="menuClose" aria-label="Cerrar menú">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <div class="menu-links">
+    <a href="#sobre-mi">Sobre mí</a>
+    <a href="#habilidades">Habilidades</a>
+    <a href="#proyectos">Proyectos</a>
+    <a href="#contacto">Contacto</a>
+  </div>
 </div>
 
 <header class="hero">
@@ -444,19 +465,17 @@
   /* ── Menú móvil ── */
   const toggle = document.getElementById('navToggle');
   const menu = document.getElementById('mobileMenu');
-  const iconMenu = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>`;
-  const iconClose = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>`;
+  const closeBtn = document.getElementById('menuClose');
 
   function setMenu(open) {
     menu.classList.toggle('open', open);
     menu.setAttribute('aria-hidden', String(!open));
     toggle.setAttribute('aria-expanded', String(open));
-    toggle.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
-    toggle.innerHTML = open ? iconClose : iconMenu;
-    document.documentElement.style.overflow = open ? 'hidden' : '';
     document.body.style.overflow = open ? 'hidden' : '';
+    if (open) closeBtn.focus();
   }
-  toggle.addEventListener('click', () => setMenu(!menu.classList.contains('open')));
+  toggle.addEventListener('click', () => setMenu(true));
+  closeBtn.addEventListener('click', () => setMenu(false));
   menu.addEventListener('click', e => { if (e.target.tagName === 'A') setMenu(false); });
   addEventListener('keydown', e => { if (e.key === 'Escape') setMenu(false); });
   addEventListener('resize', () => { if (innerWidth > 860) setMenu(false); });
