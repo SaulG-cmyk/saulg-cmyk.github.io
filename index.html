@@ -21,147 +21,219 @@
     --border:#E2E8F0;
     --sans:"Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
   }
-  *{box-sizing:border-box}
-  html{scroll-behavior:smooth}
-  body{
-    margin:0;background:var(--bg);color:var(--text);
-    font-family:var(--sans);font-size:16px;line-height:1.6;
-    -webkit-font-smoothing:antialiased;
-  }
-  a{color:inherit;text-decoration:none}
-  a:focus-visible,button:focus-visible{outline:2px solid var(--navy);outline-offset:3px;border-radius:6px}
-  .wrap{max-width:1200px;margin:0 auto;padding:0 40px}
-  svg{display:block}
 
-  /* ---------- Nav ---------- */
-  nav{
-    position:sticky;top:0;z-index:20;background:rgba(255,255,255,.92);
-    backdrop-filter:blur(8px);border-bottom:1px solid var(--border);
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font-family: var(--sans); font-size: 16px; line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    cursor: none; overflow-x: hidden;
   }
-  .nav-inner{display:flex;align-items:center;justify-content:space-between;height:64px}
-  .brand{display:flex;align-items:center;gap:8px;font-weight:600;font-size:.95rem}
-  .nav-links{display:flex;gap:28px;font-size:.88rem;color:var(--muted)}
-  .nav-links a:hover{color:var(--text)}
-  .btn{
-    background:var(--navy);color:#fff;font-size:.82rem;font-weight:500;
-    padding:9px 18px;border-radius:7px;border:0;cursor:pointer;
-  }
-  .btn:hover{background:var(--slate)}
-  .nav-toggle{display:none;background:none;border:0;padding:6px;cursor:pointer;color:var(--text)}
+  a { color: inherit; text-decoration: none; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--navy); outline-offset: 3px; border-radius: 6px; }
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
+  svg { display: block; }
 
-  /* ---------- Hero ---------- */
-  .hero{padding:76px 0 88px}
-  .hero-inner{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:56px;align-items:center}
-  h1{font-size:2.5rem;font-weight:400;line-height:1.28;letter-spacing:-.02em;margin:0 0 22px;max-width:15em}
-  h1 strong{font-weight:700}
-  .hero p{color:var(--muted);font-size:.88rem;line-height:1.65;max-width:34em;margin:0 0 28px}
-  .socials{display:flex;gap:10px}
-  .socials a{
-    width:40px;height:40px;border:1px solid var(--border);border-radius:8px;
-    display:grid;place-items:center;color:var(--text);background:#fff;
-    transition:border-color .15s, transform .15s;
+  /* ── Cursor ── */
+  #cursor {
+    position: fixed; width: 10px; height: 10px;
+    background: var(--navy); border-radius: 50%;
+    pointer-events: none; z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.12s ease, width 0.2s, height 0.2s, background 0.2s;
   }
-  .socials a:hover{border-color:var(--navy);transform:translateY(-2px)}
-  .avatar{
-    width:180px;height:180px;border-radius:50%;background:var(--bg-soft);
-    display:grid;place-items:center;color:var(--muted-light);
-    border:1px solid var(--border);overflow:hidden;
+  #cursor-ring {
+    position: fixed; width: 34px; height: 34px;
+    border: 1.5px solid rgba(15,23,42,0.35);
+    border-radius: 50%; pointer-events: none; z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: width 0.22s ease, height 0.22s ease, border-color 0.2s;
   }
-  .avatar img{width:100%;height:100%;object-fit:cover}
+  body:has(a:hover) #cursor { width: 6px; height: 6px; background: var(--navy); }
+  body:has(a:hover) #cursor-ring { width: 48px; height: 48px; border-color: rgba(15,23,42,0.55); }
+  body:has(button:hover) #cursor-ring { width: 48px; height: 48px; }
 
-  /* ---------- Secciones ---------- */
-  section{padding:72px 0}
-  .soft{background:var(--bg-soft);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
-  h2{
-    text-align:center;font-size:1.7rem;font-weight:700;letter-spacing:-.02em;
-    margin:0 0 44px;
+  /* ── Nav ── */
+  nav {
+    position: sticky; top: 0; z-index: 20;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.3s, box-shadow 0.3s;
   }
-  h2::after{
-    content:"";display:block;width:44px;height:3px;background:currentColor;
-    border-radius:2px;margin:14px auto 0;
+  nav.scrolled {
+    border-bottom-color: var(--border);
+    box-shadow: 0 1px 20px rgba(15,23,42,0.06);
   }
-  .intro{max-width:78ch;margin:0 auto;text-align:center;color:var(--text);font-size:.95rem}
+  .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  .brand { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: .95rem; }
+  .nav-links { display: flex; gap: 28px; font-size: .88rem; color: var(--muted); }
+  .nav-links a {
+    position: relative; padding-bottom: 2px;
+    transition: color 0.2s;
+  }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: -2px; left: 0;
+    width: 0; height: 1.5px; background: var(--navy);
+    transition: width 0.25s ease;
+  }
+  .nav-links a:hover { color: var(--text); }
+  .nav-links a:hover::after { width: 100%; }
+  .btn {
+    background: var(--navy); color: #fff; font-size: .82rem;
+    font-weight: 500; padding: 9px 18px; border-radius: 7px; border: 0;
+    cursor: none; transition: background 0.2s, transform 0.2s;
+    display: inline-block;
+  }
+  .btn:hover { background: var(--slate); transform: translateY(-1px); }
+  .nav-toggle { display: none; background: none; border: 0; padding: 6px; cursor: none; color: var(--text); }
 
-  /* ---------- Habilidades ---------- */
-  .skills{display:flex;flex-wrap:wrap;justify-content:center;gap:20px;max-width:520px;margin:0 auto}
-  .skill{
-    width:100px;height:82px;border:1px solid var(--border);border-radius:10px;
-    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
-    background:#fff;transition:border-color .15s, box-shadow .15s;
+  /* ── Hero ── */
+  .hero { padding: 76px 0 88px; }
+  .hero-inner { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 56px; align-items: center; }
+  h1 {
+    font-size: 2.5rem; font-weight: 400; line-height: 1.28;
+    letter-spacing: -.02em; margin: 0 0 22px; max-width: 15em;
+    opacity: 0; transform: translateY(22px);
+    animation: fadeUp 0.7s 0.15s forwards;
   }
-  .skill:hover{border-color:var(--muted-light);box-shadow:0 2px 10px rgba(15,23,42,.06)}
-  .skill span{font-size:.76rem;color:var(--muted)}
+  h1 strong { font-weight: 700; }
+  .hero p {
+    color: var(--muted); font-size: .88rem; line-height: 1.65;
+    max-width: 34em; margin: 0 0 28px;
+    opacity: 0; transform: translateY(18px);
+    animation: fadeUp 0.7s 0.3s forwards;
+  }
+  .socials {
+    display: flex; gap: 10px;
+    opacity: 0; transform: translateY(16px);
+    animation: fadeUp 0.7s 0.45s forwards;
+  }
+  .socials a {
+    width: 40px; height: 40px; border: 1px solid var(--border);
+    border-radius: 8px; display: grid; place-items: center;
+    color: var(--text); background: #fff;
+    transition: border-color .2s, transform .2s, box-shadow .2s;
+  }
+  .socials a:hover { border-color: var(--navy); transform: translateY(-3px); box-shadow: 0 6px 16px rgba(15,23,42,0.1); }
+  .avatar {
+    width: 180px; height: 180px; border-radius: 50%;
+    background: var(--bg-soft); display: grid; place-items: center;
+    color: var(--muted-light); border: 1px solid var(--border); overflow: hidden;
+    opacity: 0; transform: scale(0.9);
+    animation: fadeScale 0.8s 0.2s forwards;
+  }
+  .avatar img { width: 100%; height: 100%; object-fit: cover; }
 
-  /* ---------- Proyectos ---------- */
-  .dark{background:var(--navy);color:#fff}
-  .projects{display:flex;flex-direction:column;gap:18px}
-  .card{
-    background:var(--slate);border:1px solid var(--border-dark);border-radius:10px;
-    padding:22px 24px;
+  /* ── Secciones ── */
+  section { padding: 72px 0; }
+  .soft { background: var(--bg-soft); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  h2 {
+    text-align: center; font-size: 1.7rem; font-weight: 700;
+    letter-spacing: -.02em; margin: 0 0 44px;
   }
-  .card-head{display:flex;align-items:flex-start;gap:14px;margin-bottom:14px}
-  .card-icon{
-    width:36px;height:36px;flex:none;border-radius:8px;background:#2B3A52;
-    display:grid;place-items:center;color:#CBD5E1;
+  h2::after {
+    content: ""; display: block; width: 44px; height: 3px;
+    background: currentColor; border-radius: 2px; margin: 14px auto 0;
   }
-  .card h3{font-size:1rem;font-weight:600;margin:0 0 2px}
-  .card .sub{font-size:.78rem;color:var(--muted-light);margin:0}
-  .card ul{margin:0;padding-left:18px;font-size:.86rem;color:#E2E8F0}
-  .card li{margin-bottom:8px}
-  .card li:last-child{margin-bottom:0}
-  .card > p{font-size:.86rem;color:#E2E8F0;margin:0}
-  .tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}
-  .tags span{
-    font-size:.72rem;color:#CBD5E1;border:1px solid var(--border-dark);
-    border-radius:5px;padding:3px 9px;
-  }
+  .intro { max-width: 78ch; margin: 0 auto; text-align: center; color: var(--text); font-size: .95rem; }
 
-  /* ---------- Contacto ---------- */
-  .contact-sub{text-align:center;color:var(--muted);font-size:.85rem;margin:-28px 0 36px}
-  .contact-list{display:flex;flex-direction:column;gap:14px}
-  .contact-row{
-    display:flex;align-items:center;gap:16px;border:1px solid var(--border);
-    border-radius:10px;padding:16px 20px;background:#fff;
-    transition:border-color .15s, transform .15s;
+  /* ── Habilidades ── */
+  .skills { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; max-width: 520px; margin: 0 auto; }
+  .skill {
+    width: 100px; height: 82px; border: 1px solid var(--border); border-radius: 10px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+    background: #fff; transition: border-color .2s, box-shadow .2s, transform .2s;
   }
-  .contact-row:hover{border-color:var(--navy);transform:translateX(3px)}
-  .contact-icon{
-    width:38px;height:38px;flex:none;border-radius:8px;background:var(--navy);
-    display:grid;place-items:center;color:#fff;
-  }
-  .contact-row strong{display:block;font-size:.88rem;font-weight:600}
-  .contact-row .val{font-size:.82rem;color:var(--muted)}
+  .skill:hover { border-color: var(--muted-light); box-shadow: 0 6px 20px rgba(15,23,42,0.08); transform: translateY(-4px); }
+  .skill span { font-size: .76rem; color: var(--muted); }
 
-  footer{
-    border-top:1px solid var(--border);text-align:center;
-    color:var(--muted);font-size:.8rem;padding:26px 0;
+  /* ── Proyectos ── */
+  .dark { background: var(--navy); color: #fff; }
+  .projects { display: flex; flex-direction: column; gap: 18px; }
+  .card {
+    background: var(--slate); border: 1px solid var(--border-dark);
+    border-radius: 10px; padding: 22px 24px;
+    transition: border-color .25s, transform .25s, box-shadow .25s;
   }
+  .card:hover { border-color: #4F8EF7; transform: translateX(6px); box-shadow: -4px 0 0 #4F8EF7; }
+  .card-head { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 14px; }
+  .card-icon { width: 36px; height: 36px; flex: none; border-radius: 8px; background: #2B3A52; display: grid; place-items: center; color: #CBD5E1; }
+  .card h3 { font-size: 1rem; font-weight: 600; margin: 0 0 2px; }
+  .card .sub { font-size: .78rem; color: var(--muted-light); margin: 0; }
+  .card ul { margin: 0; padding-left: 18px; font-size: .86rem; color: #E2E8F0; }
+  .card li { margin-bottom: 8px; }
+  .card li:last-child { margin-bottom: 0; }
+  .card > p { font-size: .86rem; color: #E2E8F0; margin: 0; }
+  .tags { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 14px; }
+  .tags span { font-size: .72rem; color: #CBD5E1; border: 1px solid var(--border-dark); border-radius: 5px; padding: 3px 9px; }
 
+  /* ── Contacto ── */
+  .contact-sub { text-align: center; color: var(--muted); font-size: .85rem; margin: -28px 0 36px; }
+  .contact-list { display: flex; flex-direction: column; gap: 14px; }
+  .contact-row {
+    display: flex; align-items: center; gap: 16px;
+    border: 1px solid var(--border); border-radius: 10px;
+    padding: 16px 20px; background: #fff;
+    transition: border-color .2s, transform .2s, box-shadow .2s;
+  }
+  .contact-row:hover { border-color: var(--navy); transform: translateX(5px); box-shadow: 0 4px 16px rgba(15,23,42,0.08); }
+  .contact-icon { width: 38px; height: 38px; flex: none; border-radius: 8px; background: var(--navy); display: grid; place-items: center; color: #fff; }
+  .contact-row strong { display: block; font-size: .88rem; font-weight: 600; }
+  .contact-row .val { font-size: .82rem; color: var(--muted); }
+
+  footer { border-top: 1px solid var(--border); text-align: center; color: var(--muted); font-size: .8rem; padding: 26px 0; }
+
+  /* ── Scroll reveal ── */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+
+  @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeScale { to { opacity: 1; transform: scale(1); } }
+
+  /* ── Móvil ── */
   @media (max-width:860px){
-    .wrap{padding:0 24px}
-    .nav-links{
-      display:none;position:absolute;top:64px;left:0;right:0;background:#fff;
-      flex-direction:column;gap:0;padding:8px 24px 16px;border-bottom:1px solid var(--border);
+    .wrap { padding: 0 24px; }
+    .nav-links {
+      display: none; position: fixed; top: 64px; left: 0; right: 0; bottom: 0;
+      flex-direction: column; gap: 0; padding: 32px 32px;
+      background: rgba(255,255,255,0.97); backdrop-filter: blur(20px);
+      border-top: 1px solid var(--border);
+      opacity: 0; transform: translateY(-8px);
+      transition: opacity 0.25s, transform 0.25s;
+      pointer-events: none;
     }
-    .nav-links.open{display:flex}
-    .nav-links a{padding:11px 0;border-bottom:1px solid var(--border)}
-    .nav-toggle{display:block}
-    .hero{padding:52px 0 60px}
-    .hero-inner{grid-template-columns:1fr;gap:36px;justify-items:start}
-    h1{font-size:1.95rem}
-    .avatar{width:140px;height:140px}
-    h2{font-size:1.45rem}
-    section{padding:56px 0}
+    .nav-links.open { display: flex; opacity: 1; transform: translateY(0); pointer-events: all; }
+    .nav-links a { font-size: 1.5rem; font-weight: 600; padding: 16px 0; border-bottom: 1px solid var(--border); color: var(--text); }
+    .btn { display: none; }
+    .nav-toggle { display: block; }
+    .hero { padding: 52px 0 60px; }
+    .hero-inner { grid-template-columns: 1fr; gap: 36px; justify-items: start; }
+    h1 { font-size: 1.95rem; }
+    .avatar { width: 140px; height: 140px; }
+    h2 { font-size: 1.45rem; }
+    section { padding: 56px 0; }
+    body { cursor: auto; }
+    #cursor, #cursor-ring { display: none; }
   }
-  @media (prefers-reduced-motion:reduce){
-    *{transition:none!important}
-    html{scroll-behavior:auto}
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition: none !important; animation: none !important; }
+    h1, .hero p, .socials, .avatar { opacity: 1; transform: none; }
+    .reveal { opacity: 1; transform: none; }
   }
 </style>
 </head>
 <body>
 
-<nav>
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<nav id="navbar">
   <div class="wrap nav-inner">
     <div class="brand">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="10" r="3"/><path d="M7 20.7a8 8 0 0 1 10 0"/></svg>
@@ -174,9 +246,9 @@
       <a href="#contacto">Contacto</a>
     </div>
     <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="navLinks">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      <svg id="menuIcon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
     </button>
-    <a class="btn" href="#contacto" style="display:inline-block">Contactar</a>
+    <a class="btn" href="#contacto">Contactar</a>
   </div>
 </nav>
 
@@ -207,40 +279,40 @@
 <main>
   <section class="soft" id="sobre-mi">
     <div class="wrap">
-      <h2>Sobre mí</h2>
-      <p class="intro">Desarrollo de software, modelado de bases de datos y seguridad informática. He trabajado en equipos multidisciplinarios donde me tocó coordinar la comunicación entre frontend y backend.</p>
+      <h2 class="reveal">Sobre mí</h2>
+      <p class="intro reveal reveal-delay-1">Desarrollo de software, modelado de bases de datos y seguridad informática. He trabajado en equipos multidisciplinarios donde me tocó coordinar la comunicación entre frontend y backend.</p>
     </div>
   </section>
 
   <section id="habilidades">
     <div class="wrap">
-      <h2>Habilidades técnicas</h2>
+      <h2 class="reveal">Habilidades técnicas</h2>
       <div class="skills">
-        <div class="skill">
+        <div class="skill reveal reveal-delay-1">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></svg>
           <span>C#</span>
         </div>
-        <div class="skill">
+        <div class="skill reveal reveal-delay-1">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m4 17 6-5-6-5M12 19h8"/></svg>
           <span>Python</span>
         </div>
-        <div class="skill">
+        <div class="skill reveal reveal-delay-2">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8h1a4 4 0 0 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><path d="M6 2v3M10 2v3M14 2v3"/></svg>
           <span>Java</span>
         </div>
-        <div class="skill">
+        <div class="skill reveal reveal-delay-2">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 9 6 6M15 9l-6 6"/></svg>
           <span>Linux</span>
         </div>
-        <div class="skill">
+        <div class="skill reveal reveal-delay-3">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 3 7v10l9 5 9-5V7Z"/><path d="m3 7 9 5 9-5M12 22V12"/></svg>
           <span>Unity</span>
         </div>
-        <div class="skill">
+        <div class="skill reveal reveal-delay-3">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="8" r="3"/><path d="M6 9v6M15.5 9.8 8.5 15"/></svg>
           <span>Git</span>
         </div>
-        <div class="skill">
+        <div class="skill reveal reveal-delay-3">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg>
           <span>PostgreSQL</span>
         </div>
@@ -250,10 +322,9 @@
 
   <section class="dark" id="proyectos">
     <div class="wrap">
-      <h2>Proyectos destacados</h2>
+      <h2 class="reveal">Proyectos destacados</h2>
       <div class="projects">
-
-        <article class="card">
+        <article class="card reveal reveal-delay-1">
           <div class="card-head">
             <div class="card-icon">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h7v14H3zM14 5h7v14h-7z"/></svg>
@@ -270,7 +341,7 @@
           <div class="tags"><span>CRM</span><span>Bases de datos</span><span>Automatización</span></div>
         </article>
 
-        <article class="card">
+        <article class="card reveal reveal-delay-2">
           <div class="card-head">
             <div class="card-icon">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg>
@@ -284,7 +355,7 @@
           <div class="tags"><span>PostgreSQL</span><span>SQL</span><span>Git</span></div>
         </article>
 
-        <article class="card">
+        <article class="card reveal reveal-delay-3">
           <div class="card-head">
             <div class="card-icon">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 9 5-9 5-9-5Z"/><path d="m3 12 9 5 9-5M3 17l9 5 9-5"/></svg>
@@ -297,42 +368,32 @@
           <p>Desarrollo de scripts en C# y sistemas de interacción para entornos virtuales dentro del motor Unity.</p>
           <div class="tags"><span>Unity</span><span>C#</span></div>
         </article>
-
       </div>
     </div>
   </section>
 
   <section class="soft" id="contacto">
     <div class="wrap">
-      <h2>Contacto</h2>
-      <p class="contact-sub">¿Te interesa colaborar o conocer más de mi trabajo?</p>
+      <h2 class="reveal">Contacto</h2>
+      <p class="contact-sub reveal reveal-delay-1">¿Te interesa colaborar o conocer más de mi trabajo?</p>
       <div class="contact-list">
-        <a class="contact-row" href="mailto:saulgutierrez143@gmail.com">
+        <a class="contact-row reveal reveal-delay-1" href="mailto:saulgutierrez143@gmail.com">
           <div class="contact-icon">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg>
           </div>
-          <div>
-            <strong>Email</strong>
-            <span class="val">saulgutierrez143@gmail.com</span>
-          </div>
+          <div><strong>Email</strong><span class="val">saulgutierrez143@gmail.com</span></div>
         </a>
-        <a class="contact-row" href="https://github.com/SaulG-cmyk" target="_blank" rel="noopener">
+        <a class="contact-row reveal reveal-delay-2" href="https://github.com/SaulG-cmyk" target="_blank" rel="noopener">
           <div class="contact-icon">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.9a3.4 3.4 0 0 0-.9-2.6c3-.3 6.2-1.5 6.2-6.7A5.2 5.2 0 0 0 19.9 5a4.9 4.9 0 0 0-.1-3.6s-1.1-.3-3.7 1.4a12.7 12.7 0 0 0-6.6 0C6.9 1.1 5.8 1.4 5.8 1.4A4.9 4.9 0 0 0 5.7 5a5.2 5.2 0 0 0-1.4 3.6c0 5.2 3.2 6.4 6.2 6.7a3.4 3.4 0 0 0-.9 2.6V22"/></svg>
           </div>
-          <div>
-            <strong>GitHub</strong>
-            <span class="val">github.com/SaulG-cmyk</span>
-          </div>
+          <div><strong>GitHub</strong><span class="val">github.com/SaulG-cmyk</span></div>
         </a>
-        <a class="contact-row" href="https://instagram.com/saul.sys" target="_blank" rel="noopener">
+        <a class="contact-row reveal reveal-delay-3" href="https://instagram.com/saul.sys" target="_blank" rel="noopener">
           <div class="contact-icon">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="3.6"/><circle cx="17.2" cy="6.8" r="1"/></svg>
           </div>
-          <div>
-            <strong>Instagram</strong>
-            <span class="val">instagram.com/saul.sys</span>
-          </div>
+          <div><strong>Instagram</strong><span class="val">instagram.com/saul.sys</span></div>
         </a>
       </div>
     </div>
@@ -342,18 +403,49 @@
 <footer>© 2026 Saúl Gutiérrez</footer>
 
 <script>
+  /* ── Cursor ── */
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursor-ring');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  (function tick() {
+    cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+    rx += (mx - rx) * 0.13; ry += (my - ry) * 0.13;
+    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+    requestAnimationFrame(tick);
+  })();
+
+  /* ── Nav scroll ── */
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 30);
+  }, { passive: true });
+
+  /* ── Menú móvil ── */
   const toggle = document.getElementById('navToggle');
   const links = document.getElementById('navLinks');
+  const iconMenu = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>`;
+  const iconClose = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>`;
   toggle.addEventListener('click', () => {
     const open = links.classList.toggle('open');
     toggle.setAttribute('aria-expanded', open);
+    toggle.innerHTML = open ? iconClose : iconMenu;
+    document.body.style.overflow = open ? 'hidden' : '';
   });
   links.addEventListener('click', e => {
     if (e.target.tagName === 'A') {
       links.classList.remove('open');
       toggle.setAttribute('aria-expanded', 'false');
+      toggle.innerHTML = iconMenu;
+      document.body.style.overflow = '';
     }
   });
+
+  /* ── Scroll reveal ── */
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 </script>
 
 </body>
