@@ -264,20 +264,20 @@
   }
 </style>
 </head>
-<body>
+<body id="top">
 
 <div id="cursor"></div>
 <div id="cursor-ring"></div>
 
 <nav id="navbar">
   <div class="wrap nav-inner">
-    <div class="brand">
+    <a href="#top" class="brand" aria-label="Ir al inicio">
       <svg width="22" height="22" viewBox="0 0 64 64" style="border-radius:6px">
         <rect x="2" y="2" width="60" height="60" rx="16" fill="#0F172A"/>
         <path d="M40 20H27a6 6 0 0 0 0 12h10a6 6 0 0 1 0 12H23" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
       
-    </div>
+    </a>
     <div class="nav-links">
       <a href="#sobre-mi">Sobre mí</a>
       <a href="#habilidades">Habilidades</a>
@@ -294,13 +294,13 @@
 
 <div id="mobileMenu" aria-hidden="true">
   <div class="menu-head">
-    <div class="brand">
+    <a href="#top" class="brand" aria-label="Ir al inicio">
       <svg width="22" height="22" viewBox="0 0 64 64" style="display:inline-block;vertical-align:-6px;margin-right:6px;border-radius:6px">
         <rect x="2" y="2" width="60" height="60" rx="16" fill="#0F172A"/>
         <path d="M40 20H27a6 6 0 0 0 0 12h10a6 6 0 0 1 0 12H23" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
       
-    </div>
+    </a>
     <button class="menu-close" id="menuClose" aria-label="Cerrar menú">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
     </button>
@@ -528,7 +528,7 @@
   }
   toggle.addEventListener('click', () => setMenu(true));
   closeBtn.addEventListener('click', () => setMenu(false));
-  menu.addEventListener('click', e => { if (e.target.tagName === 'A') setMenu(false); });
+  menu.addEventListener('click', e => { if (e.target.closest('a')) setMenu(false); });
   addEventListener('keydown', e => { if (e.key === 'Escape') setMenu(false); });
   addEventListener('resize', () => { if (innerWidth > 860) setMenu(false); });
 
